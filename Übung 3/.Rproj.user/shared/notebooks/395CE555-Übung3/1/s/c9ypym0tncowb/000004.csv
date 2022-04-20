@@ -1,0 +1,7 @@
+"0",""
+"0","library(""pgmm"")"
+"0","load(file = ""oliveSample_11808237.RData"")"
+"0",""
+"0","olive <- dist(sampledData)"
+"0","olive_names <- names(sampledData)"
+"0",""

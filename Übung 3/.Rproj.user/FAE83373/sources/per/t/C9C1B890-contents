@@ -1,0 +1,338 @@
+---
+title: "Datenanalyse"
+author: "Maximilian Hagn (Matr. Nr. 11808237)"
+date: "25.06.2020"
+output:
+  pdf_document: default
+  word_document: default
+subtitle: Abgabe 3
+---
+
+# 1. Beispiel Multivariate Grafiken
+## Praxisbeispiel
+
+Laden Sie die Daten aus der Datei ice.RData (TUWEL) in R. Die Daten beinhalten in den ersten 8 Spalten gemessene Fettsäurewerte an menschlichen Mumien. Die Spalte code unterteilt die Objekte in 6 Gruppen, und Spalte group gibt eine genauere Beschreibung der Objekte. Z.B. ist iceman unser guter alter Ötzi, glac bezieht sich auf Gletscherleichen, fresh auf “frische” Leichen (Details im Buch Varmuza und Filzmoser, 2009).
+
+Erstellen Sie einen Segmentplot und einen Sternenplot (stars()) der ersten 8 Spalten der ice Daten. Verwenden Sie als labels der Grafiken die Namen aus der Spalte group (die Spalte kann mit dem Befehl as.character in eine Zeichenkette umgewandelt werden). Achten Sie darauf, dass Sie eine Legende hinzufügen und dass die Grafiken, die Beschriftungen und die Legende gut sichtbar sind.
+
+Zeichnen Sie außerdem einen Plot mit parallelen Koordinaten (Funktion parcoord im Package MASS) der ersten 8 Spalten der ice Daten und färben Sie die Linien nach der Spalte code. Versuchen Sie, durch Umsortieren der Spalten die Strukturen besser sichtbar zu machen.
+
+&nbsp;
+
+Daten laden
+
+```{r, echo=TRUE, eval=TRUE}
+load(file = "ice.RData")
+```
+
+&nbsp;
+
+Namen laden und Farben vergeben
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+group <- data.frame(lapply(ice[10], as.character), stringsAsFactors=FALSE)
+colors <- c("red","green","blue","black","brown","yellow","grey","orange")
+
+
+```
+
+\pagebreak
+
+Segmentplot zeichnen
+
+```{r abb1, fig.width=10, fig.height=7, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb1}Segmentplot"}
+
+sgmtPlot = stars(ice[1:8], labels = unlist(group), draw.segments = TRUE, key.loc = c(15,2))
+
+```
+
+\pagebreak
+
+Sternenplot zeichnen
+
+```{r abb2, fig.width=10, fig.height=7, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb2}Sternenplot"}
+
+starPlot = stars(ice[1:8], labels = unlist(group), lwd = 2, key.loc = c(15,2))
+
+``` 
+
+
+\pagebreak
+
+Plot mit parallelen Korrdinaten zeichnen
+
+```{r abb3, fig.width=10, fig.height=7, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb3}Plot mit parallelen Koordinaten"}
+
+MASS::parcoord(ice[, c(7, 2, 8, 1, 4, 3, 6, 5)], col = unlist(ice[9]))
+
+```
+
+\pagebreak
+## Fragestellungen
+
+#### Welche Gemeinsamkeiten zwischen den einzelnen Mumien sehen Sie im Segment- oder Sternenplot, und korrespondieren diese Strukturen mit der Spalte group? Wird dies im Plot mit parallelen Koordinaten besser sichtbar?
+
+&nbsp;
+
+Meiner Ansicht nach, ist gut zu erkennen, dass Segment- und Sternenplot die selben Daten darstellen. Vor allem bei größeren Flächen sind Übereinstimmungen zu erkennen. Bei dem Plot mit parallelen Korrdinaten werden die Gruppen mittels Farben dargestellt. Dort ist vor allem bei größeren Gruppen eine Ähnlichkeit in der Form zu erkennen.
+
+\pagebreak
+# 2. Beispiel Hauptkomponmentenanalyse
+## Praxisbeispiel
+
+Führen Sie eine Hauptkomponmentenanalyse (Principal Component Analysis, PCA) für den Datensatz data(decathlon) aus dem Paket FactoMineR durch. Verwenden Sie jedoch eine individuell generierte Teilmenge aus dem Datensatz. Diese wird wie folgt erstellt: decathlon[c("Rank", "Rank", "Pole.vault", "Javeline", "Long.jump", "Shot.put", "Discus", "Points", "400m")]
+
+Werfen Sie einen Blick auf das caret und PCA Paket.
+
+&nbsp;
+
+Daten laden
+
+```{r, echo=TRUE, eval=TRUE}
+
+library("FactoMineR")
+data(decathlon)
+
+```
+
+&nbsp;
+
+Hauptkomponentenanalyse erstellen
+
+```{r, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
+
+tm <- decathlon[c("Rank", "Rank", "Pole.vault", 
+                  "Javeline", "Long.jump", "Shot.put", 
+                  "Discus", "Points", "400m")]
+
+
+```
+
+\pagebreak
+
+Hauptkomponentenanalyse zeichen
+
+
+```{r abb4, fig.width=10, fig.height=3, echo=TRUE, fig.cap="\\label{fig:abb4}Hauptkomponentenanalyse"}
+
+par(c(3,1))
+PCA(tm)
+
+```
+
+\pagebreak
+## Fragestellungen
+
+#### Erklären Sie den Sinn von PCA und kurz den mathematischen Hintergrund.
+
+&nbsp;
+
+Bei der PCA analyse geht es darum, die Komponenten aus dem Datensatz möglichst ohne Informationsverlust zu reduzieren. Somit kann ein großer komplexer Datensatz vereinfacht dargestellt werden. 
+
+Sie basiert auf dem Mathematische Konzept der Linearkombinationen. So wird in einem großen Datensatz versucht eine Gerade zwischen den Variablenwerten zu erkennen und ein lineares Muster zu finden, dass den Datensatz bestmöglich beschreibt. 
+
+
+#### Warum sollte ggf. eine Transformation der Daten durchgeführt werden?
+
+&nbsp;
+
+Die PCA kann nur verwendet werden, wenn die Daten zumindest intervallskaliert und annähernd Normalverteilt sind. Des Weiteren können so irrelevante Daten ausgeschlossen werden.
+
+
+#### Welche Arten von Transformationen bieten sich hier an?
+
+&nbsp;
+
+Daten können durch Verschiebungen an der y-Achse in eine Normalverteilung gebracht werden.
+Des Weiteren können Daten durch Logarithmusfunktionen verändert werden. 
+
+
+#### Wie kann eine geeignete Auswahl der Komponenten a) grafisch b) mit R (bzw. R-Funktionen) erfolgen?
+
+&nbsp;
+
+
+\pagebreak
+# 3. Beispiel Clusteranalyse
+## Praxisbeispiel
+
+Führen Sie für folgenden Datensatz olive aus dem Paket pgmm Clusteranalysen mit unterschiedlichen Verfahren durch. Die Daten finden Sie in ihrem Ordner oliveSample_11808237.RData. Lesen Sie sie in R ein (siehe R Hilfe des ersten Beispiels). Achten Sie darauf, die Daten passend zu visualiseren. Hierbei können Sie sich von Inspiration Visualisierung inspirieren lassen. Stellen Sie dabei das Clustering Ergebnis ähnlich wie Beispiel Clustering den realen und korrekten Gruppen gegenüber. Wenden Sie 3 unterschiedliche CLusterverfahren an und vergleichen Sie die Ergebnisse. Begründen Sie warum Datenpunkte je nach Verfahren in verschiedene Gruppen eingeordnet werden können.
+
+Daten Laden
+
+```{r, echo=FALSE, eval=TRUE}
+
+library("dendextend")
+```
+
+```{r, echo=TRUE, eval=TRUE}
+
+library("pgmm")
+load(file = "oliveSample_11808237.RData")
+
+olive <- dist(sampledData)
+olive_names <- names(sampledData)
+
+```
+
+Cluster mit Methode Average erstellen
+
+```{r, echo=TRUE, eval=TRUE}
+
+
+cluster <- hclust(olive, method = "average")
+
+dendrogram <- as.dendrogram(cluster)
+dendrogram <- rotate(dendrogram, 1:400)
+dendrogram <- color_branches(dendrogram, k=10)
+
+labels(dendrogram) <- paste(as.character(iris[,5])
+                            [order.dendrogram(dendrogram)],"(",labels(dendrogram),")")
+
+dendrogram <- hang.dendrogram(dendrogram,hang_height=0.1)
+dendrogramaverage <- set(dendrogram, "labels_cex", 0.5)
+
+```
+
+Cluster mit Methode Centeroid erstellen
+
+```{r, echo=TRUE, eval=TRUE}
+
+olive <- dist(sampledData)
+olive_types <- names(sampledData)
+cluster <- hclust(olive, method = "centroid")
+
+dendrogram <- as.dendrogram(cluster)
+dendrogram <- rotate(dendrogram, 1:400)
+dendrogram <- color_branches(dendrogram, k=10)
+
+labels(dendrogram) <- paste(as.character(iris[,5])
+                            [order.dendrogram(dendrogram)],"(",labels(dendrogram),")")
+
+dendrogram <- hang.dendrogram(dendrogram,hang_height=0.1)
+dendrogramcentroid <- set(dendrogram, "labels_cex", 0.5)
+
+```
+
+Cluster mit Methode Median erstellen
+
+```{r, echo=TRUE, eval=TRUE}
+
+olive <- dist(sampledData)
+olive_types <- names(sampledData)
+cluster <- hclust(olive, method = "median")
+
+dendrogram <- as.dendrogram(cluster)
+dendrogram <- rotate(dendrogram, 1:400)
+dendrogram <- color_branches(dendrogram, k=10)
+
+labels(dendrogram) <- paste(as.character(iris[,5])
+                            [order.dendrogram(dendrogram)],"(",labels(dendrogram),")")
+
+dendrogram <- hang.dendrogram(dendrogram,hang_height=0.1)
+dendrogrammedian <- set(dendrogram, "labels_cex", 0.5)
+
+```
+
+Cluster mit Methode Average zeichen
+
+```{r abb5, fig.width=6, fig.height=10, echo=TRUE, fig.cap="\\label{fig:abb5}Olive Cluster Average"}
+
+plot(dendrogramaverage, 
+     main = "Olive Cluster Average", 
+     horiz =  TRUE,  nodePar = list(cex = .007))
+legend("topleft", legend = olive_names)
+
+```
+
+Cluster mit Methode Centroid zeichen
+
+```{r abb6, fig.width=6, fig.height=10, echo=TRUE, fig.cap="\\label{fig:abb6}Olive Cluster Centroid"}
+
+plot(dendrogramcentroid, 
+     main = "Olive Cluster Centroid", 
+     horiz =  TRUE,  nodePar = list(cex = .007))
+legend("topleft", legend = olive_names)
+
+```
+
+Cluster mit Methode Median zeichen
+
+```{r abb7, fig.width=6, fig.height=10, echo=TRUE, fig.cap="\\label{fig:abb7}Olive Cluster Median"}
+
+plot(dendrogrammedian, 
+     main = "Olive Cluster Median", 
+     horiz =  TRUE,  nodePar = list(cex = .007))
+legend("topleft", legend = olive_names)
+
+```
+
+\pagebreak
+## Fragestellungen
+
+#### Beschreiben Sie kurz worum es bei der Clusteranalyse geht.
+
+&nbsp;
+
+Bei der Clusteranalyse ist es möglich verschiedene Werte / Objekte in Gruppen einzuteilen. Ähnliche Beobachtungen sollen dabei in die gleiche Gruppe kommen und andere Beobachtungen in weitere Cluster.
+
+#### Nennen Sie mindestens 5 unterschiedliche Clustering Verfahren und beschreiben Sie 2 davon kurz. Gehen Sie dabei auch auf die dazugehörigen R Funktionen ein. Erläutern Sie zusätzlich die Bedeutung von Distanzmaßen.
+
+&nbsp;
+
+Partitionierungsmethoden
+Hierarchische Clustermethoden
+  Complete Linkage
+      Es wird der Maximale Abstand aller Elementenpaare beider Cluster ermittelt, dabei kann es jedoch zu kleinen Gruppen kommen
+  Single Linkage
+    Es wird der Minimale Abstand aller Elementenpaare beider Cluster ermittelt, dabei kann es jedoch zu  Ketten kommen
+  Average Linkage
+  Centroid Methode
+    Dabei wird der Abstand der Zentren beider Gruppen bestimmt.
+  Ward Methode
+Fuzzy Clustering
+Modellbasierte Clusterung
+
+#### Wie kann eine sinnnvolle und brauchbare Anzahl von Clustern bestimmt werden?
+
+&nbsp;
+
+Entweder durch statistische Kriterien wie zum Beispiel ein Dendrogramm oder durch sachlogische Überlegungen. 
+
+
+\pagebreak
+# 4. Beispiel Diskriminanzanalyse
+## Praxisbeispiel
+
+Diesmal werden wir folgenden Datensatz analysieren Wine. Verschaffen Sie sich zunächst einen Überblick über die Daten mit der scatterplotMatrix Funktion.
+
+Tipp: verwenden Sie für die folgenden Ausgaben das Paket MASS und car.
+Welche R Funktion eignet sich, um Summary Statistics für multivariate Daten zu erstellen?
+
+Teilen Sie den Datensatz im Verhältnis 70:30 in einen Trainings- und Testdatensatz ein. Führen Sie eine LDA für folgende Subsets des Datensatzes durch: 1) wine[c("V1", "Alcohol", "Malic", "Phenols")] 2) wine[c("V1", "Phenols", "Phenols", "Ash", "Alcalinity", "Proline", "Alcohol", "Nonflavanoid", "Malic", "Flavanoids")].
+
+Nutzen Sie die predict Funktion zur Prognose the Klassenzugehörigkeit für die Testdaten, und Vergleichen Sie jeweils die Vorhersage mit der tatsächlichen Klasseneinteilung und visualisieren Sie das Ergebnis ensprechend.
+
+Daten Laden
+```{r, echo=TRUE, eval=TRUE}
+
+wine <- read.csv(file = "wine.csv")
+
+```
+
+--> wine.data File enthält keinen Header mit Namen, auch durch Dateinamenänderung auf .csv nicht behoben.
+
+```{r abb8, fig.width=6, fig.height=10, echo=TRUE, fig.cap="\\label{fig:abb8}Diskriminanzanalyse"}
+
+#MASS::lda(wine, c(1:177))
+
+```
+
+## Fragestellungen
+
+#### Beschreiben Sie den Nutzen sowie die Funktionsweise der Diskriminanzanalyse kurz. Grenzen Sie hierbei insbesondere Diskriminanzanalyse von Clusteranalyse ab.
+
+&nbsp;
+
+Genauso wie bei der Clusteranalyse werden bei der Diskriminanzanalyse Daten gruppiert. Der Unterschied zur Clusteranalyse ist, dass nicht bekannt ist welche Beobachtungen in welche Gruppen gehören und wie viele Gruppen überhaupt existieren könnten. Als Input erhält die Analyse nur die Anzahl der Gruppen und die Klassenzugehörigkeit. Durch bestimmte Regeln soll das Verhalten vom Trainingsdatensatz auf den Datensatz rekonstruiert werden.

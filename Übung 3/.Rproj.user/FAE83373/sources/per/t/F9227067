@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1593105796301.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3022928310",
+    "id" : "F9227067",
+    "lastKnownWriteTime" : 1593117120,
+    "last_content_update" : 1593117120600,
+    "path" : "C:/Users/Max/Downloads/Datenanalyse/Übung 3/Übung3ascal.Rmd",
+    "project_path" : "Übung3ascal.Rmd",
+    "properties" : {
+        "cursorPosition" : "222,0",
+        "scrollLine" : "211"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

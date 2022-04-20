@@ -1,0 +1,4 @@
+"0","wine <- read.csv(file = ""wine.csv"")"
+"2","kann Datei 'wine.csv' nicht öffnen: No such file or directory"
+"2","Fehler in file(file, ""rt"") : kann Verbindung nicht Ã¶ffnen
+"

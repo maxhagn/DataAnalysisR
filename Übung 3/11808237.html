@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" >
+<head>
+	<title>Datenanalyse</title>
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="instructions.css" />
+</head>
+<body>
+	<div class="header framed">
+		<h1>3. EDV Übung</h1>
+		<h3 class="subtitle">aus 107.A03 Datenanalyse (SS20)</h3>
+	</div>
+	<div class="framed">
+		<p><strong>Achtung: Diese Angabe ist für jeden Studenten/jede Studentin individuell generiert!</strong></p>
+		<h2>Hinweise</h2>
+		<p>
+			Die Abgabe muss zwingend mit Rmarkdown erstellt werden. Ein Template (.Rmd File) ist in TUWEL verfügbar, gemeinsam mit dem resultierenden .pdf File. Das Rmarkdown File kann in R-Studio geladen und mit dem Knopf knitr ausgeführt werden. Allgemeine Anleitungen zu Rmarkdown sind ebenfals in TUWEL verfügbar.
+		</p>
+		<h2>Anmerkungen zur Ausarbeitung</h2>
+		<p class="indent">
+			Achten Sie bitte bei Ihren Grafiken darauf, dass immer der gesamte Datenbereich sowohl in x- als auch in y-Richtung sichtbar ist!
+		</p>
+		<h2>Aufgabenstellungen</h2>
+		<h3 class="indent">1. Beispiel: Multivariate Grafiken</h3>
+		<div class="indent">
+			<div class="problem1 indent">
+				<p>
+					Laden Sie die Daten aus der Datei <strong>ice.RData</strong> (TUWEL) in R.
+					Die Daten beinhalten in den ersten 8 Spalten gemessene Fettsäurewerte an menschlichen Mumien.
+					Die Spalte <code>code</code> unterteilt die Objekte in 6 Gruppen, und Spalte <code>group</code>
+					gibt eine genauere Beschreibung der Objekte. Z.B. ist <em>iceman</em> unser guter alter Ötzi, <em>glac</em>
+					bezieht sich auf Gletscherleichen, <em>fresh</em> auf “frische” Leichen (Details im Buch Varmuza und Filzmoser, 2009).
+				</p>
+				<p>
+				Erstellen Sie einen Segmentplot und einen Sternenplot (<code>stars()</code>) der ersten 8 Spalten der <code>ice</code> Daten.
+					Verwenden Sie als <code>labels</code> der Grafiken die Namen aus der Spalte <code>group</code> (die Spalte kann
+					mit dem Befehl <code>as.character</code> in eine Zeichenkette umgewandelt werden). Achten Sie darauf,
+					dass Sie eine Legende hinzufügen und dass die Grafiken, die Beschriftungen und die Legende gut sichtbar sind.
+				</p>
+				<p>
+					Zeichnen Sie außerdem einen Plot mit parallelen Koordinaten (Funktion <code>parcoord</code> im Package MASS) der ersten 8 Spalten der <code>ice</code> Daten
+					und färben Sie die Linien nach der Spalte <code>code</code>. Versuchen Sie, durch Umsortieren der Spalten
+					die Strukturen besser sichtbar zu machen.
+				</p>
+				<h4>Fragestellungen:</h4>
+				<ul>
+					<li>Welche Gemeinsamkeiten zwischen den einzelnen Mumien sehen Sie im Segment- oder Sternenplot, und
+						korrespondieren diese Strukturen mit der Spalte <code>group</code>? Wird dies im Plot
+						mit parallelen Koordinaten besser sichtbar?</li>
+				</ul>
+				<h4>R Hilfe:</h4>
+				<ul>
+					<li>Die Segmentdarstellung kann mit dem Befehl <code>stars</code> und dem Parameter
+						<code>draw.segments = TRUE</code> erstellt werden. Eine Legende wird angezeigt, wenn
+						der Parameter <code>key.loc</code> angegeben wird</li>
+					<li>Ein Sternenplot kann mit dem gleichen Befehl wie die Segmentdarstellung erstellt werden, der
+						Parameter <code>draw.segments</code> muss aber auf <code>FALSE</code> gesetzt werden.</li>
+				</ul>
+			</div>
+		</div>
+		<h3 class="indent">2. Beispiel: Hauptkomponmentenanalyse</h3>
+		<div class="indent">
+			<div class="problem2 indent">
+				<p>Führen Sie eine Hauptkomponmentenanalyse (Principal Component Analysis, PCA) für den Datensatz 
+				<code>data(decathlon)</code> aus dem Paket <code>FactoMineR</code> durch.
+                Verwenden Sie jedoch eine individuell generierte Teilmenge aus
+				    dem Datensatz. Diese wird wie folgt erstellt: <code>decathlon[c("Rank", "Rank", "Pole.vault", "Javeline", "Long.jump", "Shot.put", "Discus", "Points", "400m")]</code></p>
+				<p>Werfen Sie einen Blick auf das <code>caret</code> und <code>PCA</code> Paket.
+				</p>
+				<h4>Fragestellungen:</h4>
+				<ul>
+					<li>Erklären Sie den Sinn von PCA und kurz den mathematischen Hintergrund.</li>
+					<li>Warum sollte ggf. eine Transformation der Daten durchgeführt werden?</li>
+					<li>Welche Arten von Transformationen bieten sich hier an?</li>
+					<li>Wie kann eine geeignete Auswahl der Komponenten a) grafisch b) mit R (bzw. R-Funktionen) erfolgen?</li>
+				</ul>
+				<p>Führen Sie eine PCA unter Auswahl einer geeigneten Transformation (falls nötig) durch, bestimmen Sie die Hauptkomponenten mit einer Funktion (siehe
+				letzte Frage), und visualisieren Sie die Ergebnisse.</p>
+			</div>
+		</div>
+		<h3 class="indent">3. Beispiel: Clusteranalyse</h3>
+		<div class="indent">
+			<div class="problem3 indent">
+				<p>Beschreiben Sie kurz worum es bei der Clusteranalyse geht.</p>
+				<p>Nennen Sie mindestens 5 unterschiedliche Clustering Verfahren und beschreiben Sie 2 davon kurz.
+				    Gehen Sie dabei auch auf die dazugehörigen R Funktionen ein. Erläutern Sie zusätzlich die Bedeutung von Distanzmaßen.</p>
+				<p>Wie kann eine sinnnvolle und brauchbare Anzahl von Clustern bestimmt werden?</p>
+				<p>Führen Sie für folgenden Datensatz <code>olive</code> aus dem Paket <code>pgmm</code> Clusteranalysen mit unterschiedlichen Verfahren durch.
+				    Die Daten finden Sie in ihrem Ordner
+				    <strong>oliveSample_11808237.RData</strong>.
+				    Lesen Sie sie in R ein (siehe R Hilfe des ersten Beispiels).
+				    Achten Sie darauf, die Daten passend zu visualiseren. Hierbei können Sie sich von <a href="https://cran.r-project.org/web/packages/dendextend/vignettes/Cluster_Analysis.html">Inspiration Visualisierung</a>
+				    inspirieren lassen. Stellen Sie dabei das Clustering Ergebnis ähnlich wie <a href="http://www.rdatamining.com/examples/kmeans-clustering">Beispiel Clustering</a> den realen und korrekten Gruppen gegenüber.
+				    Wenden Sie 3 unterschiedliche CLusterverfahren an und vergleichen Sie die Ergebnisse.
+				    Begründen Sie warum Datenpunkte je nach Verfahren in verschiedene Gruppen eingeordnet werden können.</p>
+			</div>
+		</div>
+		<h3 class="indent">4. Beispiel: Diskriminanzanalyse</h3>
+		<div class="indent">
+			<div class="problem4 indent">
+				<p>Beschreiben Sie den Nutzen sowie die Funktionsweise der Diskriminanzanalyse kurz. Grenzen Sie hierbei insbesondere Diskriminanzanalyse
+				    von Clusteranalyse ab.</p>
+				<p>Tipp: verwenden Sie für die folgenden Ausgaben das Paket <code>MASS</code> und <code>car</code>.</p>
+				<p>Diesmal werden wir folgenden Datensatz analysieren <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data">Wine</a></p>
+				<p>Verschaffen Sie sich zunächst einen Überblick über die Daten
+				    mit der <code>scatterplotMatrix</code> Funktion.</p>
+				<p>Welche R Funktion eignet sich, um Summary Statistics für multivariate Daten zu erstellen?</p>
+				<p>Teilen Sie den Datensatz im Verhältnis <code>70:30</code> in einen Trainings- und Testdatensatz ein. Führen Sie eine LDA für folgende Subsets des Datensatzes durch: 1)
+				    <code>wine[c("V1", "Alcohol", "Malic", "Phenols")]</code>
+				    2) <code>wine[c("V1", "Phenols", "Phenols", "Ash", "Alcalinity", "Proline", "Alcohol", "Nonflavanoid", "Malic", "Flavanoids")]</code>.</p>
+				<p>Nutzen Sie die <code>predict</code> Funktion zur Prognose the Klassenzugehörigkeit für die Testdaten, und Vergleichen Sie jeweils die Vorhersage mit der tatsächlichen Klasseneinteilung und visualisieren Sie das Ergebnis ensprechend.</p>
+			</div>
+		</div>
+		<h2>Abgabe:</h2>
+		<p class="indent">
+			Die Abgabe erfolgt schriftlich als PDF oder <strong>HTML direkt aus knitr</strong> über <a href="#{ASSIGNMENT_UPLOAD}">TUWEL</a> und ist bis spätestens <strong>Deadline siehe TUWEL</strong> hochzuladen.
+		</p>
+		<h4 class="indent">Die Abgabe soll in übersichtlicher Form folgendes beinhalten:</h4>
+		<ul class="upload-desc indent">
+			<li>die Grafiken (in hinreichender Größe)</li>
+			<li>Beschriftung der Achsen der Grafiken</li>
+			<li>die Beantwortung der Fragen</li>
+			<li>eventuell getroffene Annahmen und notwendige Begründungen</li>
+			<li>die <strong>erfolgreichen</strong> R Befehle.</li>
+		</ul>
+	</div>
+	<ul id="footer">
+		<li class="first">Technische Universität Wien</li>
+		<li>Institut für Stochastik und Wirtschaftsmathematik</li>
+		<li>1040 Wien, Wiedner Hauptstr. 8-10</li>
+		<li>AUSTRIA</li>
+	</ul>
+</body>
+</html>

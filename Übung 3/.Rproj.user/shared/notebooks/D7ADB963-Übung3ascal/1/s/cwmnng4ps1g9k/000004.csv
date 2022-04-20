@@ -1,0 +1,6 @@
+"0","par(mfrow=c(2,1))"
+"2","kann Datei 'C:/Users/Max/Downloads/Datenanalyse/Übung 3/.Rproj.user/shared/notebooks/D7ADB963-U¨bung3ascal/1/s/cwmnng4ps1g9k_t/_rs_chunk_plot_001.png' nicht zum Schreiben öffnen"
+"2","opening device failed"
+"2","Fehler in (function (filename = ""Rplot%03d.png"", width = 480, height = 480,  : 
+  kann png()-GerÃ¤t nicht starten
+"

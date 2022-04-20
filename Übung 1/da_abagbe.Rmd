@@ -1,0 +1,285 @@
+---
+title: "Datenanalyse"
+author: "Maximilian Hagn (Matr. Nr. 11808237)"
+date: "15.04.2020"
+output:
+  pdf_document: default
+  word_document: default
+subtitle: Abgabe 1
+---
+
+# 1. Beispiel
+## Praxisbeispiel
+
+Erstellen Sie ein Histogramm (siehe ?hist) 
+der Variable LOI aus der Bodenschicht bhorizon. 
+Auf diese Variable k&ouml;nnen Sie mit dem $-Operator 
+zugreifen (bhorizon$LOI). 
+
+Was versteht man unter einem Histogramm?
+
+In einem Histogram können absolute oder relative Häufigkeiten von Daten dargestellt werden.
+
+Fügen Sie nun zu diesem Histogramm zwei weitere Histogramme 
+für die (transformierten) Daten hinzu und verwenden Sie dabei
+einmal die Methode “Friedman-Diaconis” für die Anzahl der Balken
+(auswählbar mittels Parameter breaks="FD") bzw. einmal eine
+äquidistante Klasseneinteilung in 6 Klassen (entspricht einer
+Klassen-Breite von 8.69). Der Parameter breaks der hist-Funktion
+kontrolliert nur grob die Anzahl der Klassen. Es kann notwendig
+sein, die Grenzen selbst mittels seq zu erzeugen. Mit dem Befehl
+par(mfrow = c(3, 1)) können Sie 3 Grafiken untereinander
+darstellen (siehe auch ?par).
+
+Fügen Sie zwei Kerndichteschätzungen hinzu. Die
+Kerndichteschätzung kann mit dem Befehl density errechnet werden.
+Berechnen Sie die erste Kerndichteschätzung mit dem gaussian Kern
+und einmal mit dem optcosine Kern. Zeichnen Sie beide
+Kerndichteschätzungen mit dem Befehl lines (lines zeichnet in
+einen bereits bestehenden Plot) Linien in 2 unterschiedlichen
+Farben ein (siehe Parameter col des Befehls lines). Eventuell ist
+es notwendig, den Anzeigebereich des Plots anzupassen (Parameter
+ylim und xlim).
+
+
+```{r, echo=FALSE, eval=TRUE}
+library(StatDA)
+```
+
+Daten laden
+
+```{r, echo=TRUE, eval=TRUE}
+data("moss")
+data("ohorizon")
+data("bhorizon")
+data("chorizon")
+```
+
+Kerndichtefunktion für das Histogram und Methode Friedman-Diaconis
+
+```{r, echo=TRUE, eval=TRUE}
+gaussian <- density(bhorizon$LOI, kernel="gaussian", adjust=0.0001)
+optcosine <- density(bhorizon$LOI, kernel="optcosine", adjust=0.0001)
+gaussian
+optcosine
+```
+
+Kerndichtefunktion für 6 Klassen
+
+```{r, echo=TRUE, eval=TRUE}
+gaussian6 <- density(bhorizon$LOI, kernel="gaussian", adjust=0.00001)
+optcosine6 <- density(bhorizon$LOI, kernel="optcosine", adjust=0.00001)
+gaussian6
+optcosine6
+```
+
+```{r abb1, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb1}Histogramme von bHorizon Daten"}
+par(mfrow=c(3,1))
+hist(bhorizon$LOI, breaks=100, main="Histogram von bhorizon", xlim=c(-1.468,46.498), ylim=c(0,100))
+lines(gaussian, col="red")
+lines(optcosine, col="blue")
+hist(bhorizon$LOI, breaks="FD", main="Methode Friedman-Diaconis", xlim=c(0,45), ylim=c(0,100))
+lines(gaussian, col="red")
+lines(optcosine, col="blue")
+hist(bhorizon$LOI, breaks=8.69, main="In 6 Klassen", xlim=c(0,45), ylim=c(0,1000))
+lines(gaussian6, col="red")
+lines(optcosine6, col="blue")
+
+```
+
+\pagebreak
+## Fragen
+
+Ist es sinnvoll bzw. notwendig die Daten zu transformieren? Falls Sie eine Transformation durchgeführt haben, begründen sie weshalb.
+
+Ja es ist sinnvoll, da wir möglichst viel auf den Diagrammen erkennen möchten. Werden mehr breaks angezeigt, erhalten wir mehr Balken und können so die Verteilung betrachten. Des Weiteren entstehen keine großen Blöcken mit Ausreissern, aus denen schwer Erkenntnisse abgeleitet werden können.
+
+
+Erläutern Sie kurz die Unterschiede in den Klasseneinteilungen. Welche Einteilung beschreibt am besten die Daten und weshalb?
+
+Wie oben bereits beschrieben, können wir die Histogramme bzw. die darin enthaltenen Daten genauer betrachten. Es muss ein guter Mittelweg gefunden werden, um ein Histogram lesbar zu gestalten. So werden die Werte auf der y-Achse mit steigenden breaks kleiner. Meiner Ansicht nach ist die Friedman-Diaconis Methode mit diesem Datensatz sehr übersichtlich.
+
+
+Wie äußern sich die beiden unterschiedlichen Kerne der Dichteschätzung? 
+
+Die Dichteschätzung mit dem optcosine-Kern ist ein weniger geringer, als mit dem gaussian-Kern. Die beiden Kerne sind lediglich verschiedene Schätzungen des zugrunde liegenden Diagramms
+
+
+Welcher Kern ist für das konkrete Beispiel besser geeignet?
+
+Meiner Ansicht nach können für dieses konkrete Beispiel beide Kerne verwendet werden. 
+
+\pagebreak
+# 2. Beispiel
+## Praisbeispiel
+
+Verwenden Sie für dieses Beispiel die Daten Diamond aus dem R-Paket library(Ecdat).
+
+Erstellen Sie Boxplots mit Kerben für die Preise der Diamanten
+gruppiert nach der Variable colour. Bedenken Sie, dass der Preis
+von schwereren Diamanten trivialerweise höher ist, weshalb das
+Gewicht (Variable carat) herausgerechnet werden muss. Dies könnte
+z.B. so gemacht werden, dass nicht die Variable price, sondern
+price/carat genommen wird – aber diese Lösung wird noch nicht
+optimal sein, und es sollten auch andere Ansätze versucht werden
+(Tipp: der normierte Preis sollte nicht mehr von carat abhängen).
+
+
+```{r abb2, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb2}Box-Plot von Diamond Daten"}
+library(Ecdat)
+data("Diamond")
+boxplot(price/carat ~ colour, Diamond, notch=TRUE)
+
+```
+
+## Fragen
+
+Was ist die Bedeutung der Box und der Kerben im Boxplot?
+
+Die Box beschreibt die Länge vom unteren Quartil bis zum oberen Quartil. Der Strich in der Mitte bildet den Median. Die Kerben bilden das 95% Konfidenzinterval ab. 
+
+Fallen bestimmte Gruppen als besonders teuer/billig auf?
+
+Die Farbe D ist eher teuerer angesetzt und hat im Gegensatz zu den anderen Farben einen größeren Interquartilsabstand. Die anderen Farben sind sehr ähnlich. 
+
+
+Unterscheiden sich die Mediane der einzelnen Gruppen signifikant (beachten Sie insbesondere die Kerben)?
+
+Nur bei D ist der Unterschied und die Spannweite des Konfidenzintervalls signifikat unterschiedlich zu den anderen Gruppen. 
+
+
+\pagebreak
+# 3. Beispiel
+## Praxisbeispiel A
+
+Generieren Sie sich zuerst 100 Realisierungen zweier
+Zufallsgrößen die aus einer Poisson-Verteilung mit Parameter
+lambda = 5.67 bzw. einer Exponentialverteilung mit Parameter
+rate = 55 stammen. Dies funktioniert mit dem Befehl x.desc <-
+rpois(100, lambda = 5.67) bzw. x.cont <- rexp(100, rate = 55).
+Zeichnen Sie nun die empirische Verteilungsfunktion (?ecdf) der
+beiden Zufallsvektoren mit unterschiedlichen Farben in eine
+Grafik. Falls die Verteilungsfunktionen aufgrund von sehr
+unterschiedlichen numerischen Bereiche nicht in einer Grafik
+vereinbar sind, erstellen Sie separate Plots (begründen Sie dies
+jedoch in der Dokumentation). 
+
+
+```{r abb3, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb3}Zufallsverteilung von Poisson und Exponential"}
+x.desc <- rpois(100, lambda = 5.67)
+x.cont <- rexp(100, rate = 55)
+
+f0 <- ecdf(x.desc)
+f1 <-ecdf(x.cont*50)
+
+plot(f0, col="blue", main="Zufallsverteilungen", xlab="x", ylab="y")
+plot(f1, add=TRUE, col='red')
+legend("bottomright", legend=c("Poisson-Verteilung", "Exponentialverteilung "), col=c("blue", "red"), lty=1:1, cex=0.7, title="Verteilungen")
+
+```
+
+\pagebreak
+### Fragen
+
+Wie ist die empirische Verteilungsfunktion definiert? 
+
+Die empirische Verteilungsfunktion gibt zu jedem Wert x den Anteil der Werte der Stichprobe, die kleiner oder gleich x sind.
+
+Beschreiben Sie die Unterschiede, die Ihnen zwischen der diskret und der kontinuierlich verteilten Zufallsgröße auffallen.
+
+Die Poisson Verteilung ist diskret.
+Die Exponentielle Verteilung ist kontinuierlich.
+
+\pagebreak
+## Praxisbeispiel B
+
+Plotten Sie außerdem die empirische Verteilungsfunktion für die
+Variablen Co, Sr_AA und pH aus der Schicht ohorizon (falls
+sinnvoll, sollten Sie die Daten zuerst transformieren).
+
+
+```{r abb4, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb4}Empirische Verteilungsfunktion für die Daten Co, Sr_AA, ph"}
+co <- ecdf(ohorizon$Co)
+Sr_AA <- ecdf(ohorizon$Sr_AA)
+pH <- ecdf(ohorizon$pH)
+
+plot(co, col="brown", main="Verteilungsfunktion OHorizon", ylab="y")
+plot(Sr_AA, add=TRUE, col="yellow")
+plot(pH, add=TRUE, col="blue")
+
+
+```
+
+
+
+### Fragen
+
+Interpretieren Sie die Ergebnisse und Unterschiede der empirischen Verteilungsfunktionen.
+
+Co --> Exponentiell;
+Sr_AA --> Exponentiell;
+pH --> Chi2
+
+\pagebreak
+# 4. Beispiel
+## Praxisbeispiel
+
+Ziehen Sie zufällig 500 Werte aus einer Normalverteilung mit
+Mittelwert 98 und Standardabweichung 6 (x <- rnorm(500, 98, 6)).
+Erstellen Sie für die generierten Werte mit der Funktion
+qqplot.das einen QQ-Plot. 
+
+
+```{r abb5, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb5}QQ-Plot für Normalverteilung (500,98,6) "}
+x <- rnorm(500, 98, 6)
+qqplot.das(x)
+
+```
+
+\pagebreak
+### Grid Funktion
+Sind die Parameter der zugrunde liegenden Normalverteilung im Plot ersichtlich und wenn ja, wie? Hierfür kann die Funktion grid hilfreich sein, welche bei einem bereits bestehenden Plot ein Gitter im Hintergrund einblendet.
+
+Ja die Parameter sind ersichtlich, da der Mittelwert 0 bei 98 liegt und im Bereich [ -1, 1 ] eine Standardabweichung von 6 zu erkennen ist. 
+
+
+```{r abb6, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb6}QQ-Plot mit Grid für Normalverteilung (500,98,6) "}
+x <- rnorm(500, 98, 6)
+qqplot.das(x)
+grid()
+
+```
+
+\pagebreak
+## OHorizon Werte
+
+Stellen Sie nun den QQ-Plot der 3 (evtl. transformierten)
+Variablen aus Beispiel 3 dar. Der QQ-Plot der ersten Variable
+kann wieder mit qqplot.das erzeugt werden. Die weiteren
+Variablen sollen im selben Plot mit anderer Farbe aufscheinen
+(kann mit dem Parameter add.plot der Funktion qqplot.das erzielt
+werden). Passen Sie eventuell wieder die Bereiche des Plots mit
+den Parametern xlim und ylim an. Falls die Daten trotz Anpassung
+der Bereiche nicht in einen Plot passen, erstellen sie separate
+Plots (mit Begründung in der Dokumentation). 
+
+
+```{r abb7, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:abb7}QQ-Plot der 3 Variablen Co, Sr_AA, pH"}
+qqplot.das(ohorizon$Co, col="black", ylab="value")
+qqplot.das(ohorizon$Sr_AA, add.plot=TRUE, col="brown")
+qqplot.das(ohorizon$pH, add.plot=TRUE, col="blue")
+legend("topleft", legend=c("Co", "Sr_AA", "pH"), col=c("black", "brown", "blue"), lty=1:1, title="Wert")
+
+
+grid()
+
+```
+
+
+## Fragen
+
+Lassen sich im QQ-Plot Strukturen in den Daten erkennen und unterstützen die QQ-Plots ihre Schlüsse in Beispiel 3?
+
+Ja es lassen sich Strukturen erkennen. Die pH Daten sind in allen Quantilen sehr ähnlich. Die Co und Sr_AA Daten dahingegen sind exponentiell steigend, wobei Sr_AA insgesamt höhere Werte aufweist.  
+
+

@@ -1,0 +1,3 @@
+"0",""
+"0","sgmtPlot = stars(ice[1:8], labels = unlist(group), draw.segments = TRUE, key.loc = c(15,2))"
+"0",""

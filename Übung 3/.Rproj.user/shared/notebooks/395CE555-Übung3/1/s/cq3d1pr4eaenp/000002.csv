@@ -1,0 +1,5 @@
+"0",""
+"0","group <- data.frame(lapply(ice[10], as.character), stringsAsFactors=FALSE)"
+"0","colors <- c(""red"",""green"",""blue"",""black"",""brown"",""yellow"",""grey"",""orange"")"
+"0",""
+"0",""
